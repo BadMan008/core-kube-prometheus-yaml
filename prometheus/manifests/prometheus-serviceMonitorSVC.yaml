@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: k8s-svc
+  name: k8s-svc
+  namespace: monitoring
+spec:
+  endpoints:
+  - port: '80'
+    #interval: 30s
+    path: /metrics
+    # jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: service
+    #在etcd的主机上执行：kubectl -n monitoring create secret generic etcd-secret --from-file=etcd-ca=/path to/certs/ca/ca.pem --from-file=etcd-cert=/path/certs/etcd/etcd.pem --from-file=etcd-key=/path/certs/etcd/etcd-key.pem    (aliyun path=/var/lib)

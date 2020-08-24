@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: prometheus-k8s-rules-node-up
+  namespace: monitoring
+spec:
+  groups:
+  - name: node-up
+    rules:
+    - alert: node-up
+      expr: up{job="node-exporter"} == 0
+      for: 15s
+      labels:
+        severity: "1"
+        team: node
+      annotations:
+        summary: "{{ $labels.instance }} 已停止运行超过 15s！"
+        description: "{{ $labels.instance }} 检测到异常停止！请重点关注！！！"
